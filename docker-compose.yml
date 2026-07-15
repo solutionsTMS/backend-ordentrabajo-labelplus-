@@ -1,0 +1,52 @@
+services:
+  postgresdb:
+    profiles:
+      - local-db
+    image: postgres:16.2
+    container_name: orden_trabajo_db
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-orden_trabajo}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  orden_trabajo:
+    build: .
+    container_name: orden_trabajo_service
+    restart: always
+    env_file:
+      - ${ENV_FILE}
+    environment:
+      TZ: America/Guayaquil
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${TRAEFIK_ROUTER}.rule=(Host(`${TRAEFIK_HOST}`) && PathPrefix(`/api`))"
+      - "traefik.http.routers.${TRAEFIK_ROUTER}.entrypoints=websecure"
+      - "traefik.http.routers.${TRAEFIK_ROUTER}.tls=true"
+      - "traefik.http.routers.${TRAEFIK_ROUTER}.middlewares=sec-headers@file"
+      - "traefik.http.routers.${TRAEFIK_ROUTER}.service=${TRAEFIK_ROUTER}"
+      - "traefik.http.services.${TRAEFIK_ROUTER}.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.stsSeconds=63072000"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.stsPreload=true"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.frameDeny=true"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.referrerPolicy=no-referrer-when-downgrade"
+      - "traefik.http.middlewares.${TRAEFIK_ROUTER}-sec-headers.headers.customFrameOptionsValue=SAMEORIGIN"
+    #ports:
+    #  - '8080:8080'
+    networks:
+      - tms_net
+
+volumes:
+  postgres_data:
+
+networks:
+  tms_net:
+    external: true
