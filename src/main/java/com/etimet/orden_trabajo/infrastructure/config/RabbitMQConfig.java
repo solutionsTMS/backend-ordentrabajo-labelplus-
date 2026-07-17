@@ -18,14 +18,12 @@ import tools.jackson.databind.json.JsonMapper;
 public class RabbitMQConfig {
     public static final String ERP_EXCHANGE = "erp.exchange";
 
-    // --- NUEVAS CONSTANTES PARA TAURUS ---
-    public static final String TAURUS_CLIENTES_QUEUE = "catalogos.taurus.clientes.queue";
-    public static final String TAURUS_CLIENTES_DLQ = "catalogos.taurus.clientes.dlq";
+    public static final String TAURUS_CLIENTES_QUEUE = "orden-trabajo.taurus.clientes.queue";
+    public static final String TAURUS_CLIENTES_DLQ = "orden-trabajo.taurus.clientes.dlq";
 
-    // La llave con la que Taurus enviará el mensaje (puedes ajustarla según te
-    // indiquen)
+    // Misma routing key que publica Taurus / escucha Catálogos.
     public static final String TAURUS_ROUTING_KEY = "taurus.cliente.enviado";
-    public static final String TAURUS_DLQ_ROUTING_KEY = "catalogos.taurus.clientes.dlq.key";
+    public static final String TAURUS_DLQ_ROUTING_KEY = "orden-trabajo.taurus.clientes.dlq.key";
 
     @Bean
     public TopicExchange erpExchange() {

@@ -267,13 +267,15 @@ Orden de Trabajo **consume** eventos de clientes publicados desde **Taurus** y l
 
 ### Configuración
 
-| Concepto              | Valor                             |
-| --------------------- | --------------------------------- |
-| Exchange              | `erp.exchange`                    |
-| Cola clientes         | `catalogos.taurus.clientes.queue` |
-| Routing key           | `taurus.cliente.enviado`          |
-| DLQ                   | `catalogos.taurus.clientes.dlq`   |
-| Routing key DLQ       | `catalogos.taurus.clientes.dlq.key` |
+| Concepto        | Valor                                    |
+| --------------- | ---------------------------------------- |
+| Exchange        | `erp.exchange`                           |
+| Cola clientes   | `orden-trabajo.taurus.clientes.queue`    |
+| Routing key     | `taurus.cliente.enviado`                 |
+| DLQ             | `orden-trabajo.taurus.clientes.dlq`      |
+| Routing key DLQ | `orden-trabajo.taurus.clientes.dlq.key`  |
+
+> Cada microservicio debe tener **su propia cola** ligada al mismo routing key. No usar `catalogos.taurus.clientes.queue` aquí: esa cola la consume Catálogos y, al compartirla, los mensajes no llegan a Orden de Trabajo.
 
 ### Formato de mensajes (desde Taurus)
 

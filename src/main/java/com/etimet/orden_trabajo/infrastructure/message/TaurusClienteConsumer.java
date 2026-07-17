@@ -18,8 +18,14 @@ public class TaurusClienteConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.TAURUS_CLIENTES_QUEUE)
     public void recibirClienteDesdeTaurus(ClientesMensajeEvento mensaje) {
-        log.info("Cliente recibido desde Taurus en cola {}: {}", RabbitMQConfig.TAURUS_CLIENTES_QUEUE, mensaje);
-        clientesService.procesarClienteDesdeTaurus(mensaje);
+        try {
+            log.info("Cliente recibido desde Taurus en cola {}: {}", RabbitMQConfig.TAURUS_CLIENTES_QUEUE,
+                    mensaje);
+            clientesService.procesarClienteDesdeTaurus(mensaje);
+        } catch (Exception e) {
+            log.error("Error al procesar cliente desde Taurus. Mensaje: {}", mensaje, e);
+            throw e;
+        }
     }
 
 }
