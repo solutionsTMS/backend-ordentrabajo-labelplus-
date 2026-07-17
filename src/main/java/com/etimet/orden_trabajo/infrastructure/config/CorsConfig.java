@@ -18,7 +18,8 @@ public class CorsConfig {
                                 "https://desa-etimet.taurus-ts.com",
                                 "https://desa-labelplus-catalogo-etimet.taurus-ts.com",
                                 "https://catalogos-etimet.taurus-ts.com",
-                                "http://localhost:4200")
+                                "http://localhost:4200",
+                                "http://localhost:4204")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

@@ -53,7 +53,7 @@ public class ClientesSpecification {
     }
 
     public static Specification<Clientes> activos() {
-        return (root, query, cb) -> cb.isTrue(root.get("estado"));
+        return (root, query, cb) -> cb.isTrue(root.get("estadoCliente"));
     }
 
 }
