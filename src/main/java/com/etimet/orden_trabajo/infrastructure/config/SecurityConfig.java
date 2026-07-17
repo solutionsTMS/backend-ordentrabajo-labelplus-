@@ -19,7 +19,7 @@ public class SecurityConfig {
                 // Configurar autorización
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/prueba/**").permitAll()
 
                         // Todos los demás requieren autenticación
                         .anyRequest().authenticated())
